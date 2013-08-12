@@ -7,6 +7,7 @@ Usage
 An example says it best:
   
     int main(int argc, char** argv) {
+
       // make a new ArgumentParser
       ArgumentParser parser;
 
