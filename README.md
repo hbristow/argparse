@@ -5,30 +5,33 @@ A slimline C++ class for parsing command-line arguments, with an interface simil
 Usage
 -----
 An example says it best:
+  
+    int main(int argc, char** argv) {
+      // make a new ArgumentParser
+      ArgumentParser parser;
 
-    // make a new ArgumentParser
-    ArgumentParser parser;
+      // add some arguments to search for
+      parser.addArgument("-a");
+      parser.addArgument("-b");
+      parser.addArgument("-c", "--cactus", 1);
+      parser.addArgument("-o", "--optional");
+      parser.addArgument("-r", "--required", 1, true);
+      parser.addArgument("--five", 5);
+      parser.addArgument("--atleast", '+');
+      parser.addArgument("--any", '*');
+      parser.addFinalArgument("output");
 
-    // add some arguments to search for
-    parser.addArgument("-a");
-    parser.addArgument("-b");
-    parser.addArgument("-c", "--cactus", 1);
-    parser.addArgument("-o", "--optional");
-    parser.addArgument("-r", "--required", 1, true);
-    parser.addArgument("--five", 5);
-    parser.addArgument("--atleast", '+');
-    parser.addArgument("--any", '*');
-    parser.addFinalArgument("output");
+      // parse the command-line arguments - throws if invalid format
+      parser.parse(argc, argv);
 
-    // parse the command-line arguments
-    parser.parse(argc, argv);
-
-    // if we get here, the configuration is valid
-    int cactus = parser.retrieve<int>("cactus");
+      // if we get here, the configuration is valid
+      int cactus = parser.retrieve<int>("cactus");
+      return cactus;
+    }
 
 If the supplied format is incorrect or we explicitly call `parser.usage()`, a usage string is printed to the terminal:
 
-    Usage: app_name --required REQUIRED [-a] [-b] [--cactus CACTUS] 
+    Usage: app_name --required REQUIRED [-a] [-b] [--optional] [--cactus CACTUS] 
                     [--five FIVE FIVE FIVE ...] [--atleast ATLEAST [ATLEAST ...]]
                     [--any [ANY ...]] output
 
