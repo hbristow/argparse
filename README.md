@@ -54,7 +54,7 @@ The number of expected inputs trailing an argument can also be specified. This c
 1. fixed number arguments
 2. variable number arguments
 
-Fixed number arguments are simply specified with an integer which is zero or greater. If that exact number of inputs trailing the argument is not found, the parser will fail with a std::invalid_argument exception. If the number is 1, the input is stored as a string. If the number is greater than 1, the input is stored as a vector of strings.
+Fixed number arguments are simply specified with an integer which is zero or greater. If that exact number of inputs trailing the argument is not found, the parser will fail with a `std::invalid_argument` exception. If the number is 1, the input is stored as a string. If the number is greater than 1, the input is stored as a vector of strings.
 
 
 Variable number arguments allow for an undetermined number of inputs trailing an argument. The parser will attempt to consume as many arguments as possible until the next valid argument is encountered. There are two types of variable argument specifiers, and they use the same syntax as regular expressions:
@@ -76,7 +76,7 @@ Often UNIX command-line tools have an un-named final argument that collects all 
 
 Retrieving
 ----------
-Inputs to an argument can be retrieved with the `retrieve()` method of `ArgumentParser`. Importantly, if the inputs are parsed as an array, they must be retrieved as an array. Failure to do so will result in a std::bad_cast exception. 
+Inputs to an argument can be retrieved with the `retrieve()` method of `ArgumentParser`. Importantly, if the inputs are parsed as an array, they must be retrieved as an array. Failure to do so will result in a `std::bad_cast` exception. 
 
 Arguments can also be cast to other types as long as the cast is trivial. For instance, we could retrieve the array of strings from the '--five' argument as an array of ints:
 
@@ -85,3 +85,20 @@ Arguments can also be cast to other types as long as the cast is trivial. For in
 or convert the required argument to a float:
 
     float  req = parser.retrieve<float>("r");
+
+Method Summary
+--------------
+
+    ArgumentParser()      default constructor
+    appName()             set the name of the application
+    addArgument()         specify an argument to search for
+    addFinalArgument()    specify a final un-named argument
+    ignoreFirstArgument() don't parse the first argument (usually the caller name on UNIX)
+    parse()               invoke the parser on a `char**` array
+    retrieve()            retrieve a set of inputs for an option
+    usage()               return a formatted usage string
+    empty()               check if the set of specified arguments is empty
+    clear()               clear all specified arguments
+    exists()              check if an argument has been found
+    count()               count the number of inputs for an argument
+
