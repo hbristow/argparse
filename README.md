@@ -28,9 +28,9 @@ An example says it best:
 
 If the supplied format is incorrect or we explicitly call `parser.usage()`, a usage string is printed to the terminal:
 
-    Usage app_name --required REQUIRED [-a] [-b] [--cactus CACTUS] 
-                   [--five FIVE FIVE FIVE ...] [--atleast ATLEAST [ATLEAST ...]]
-                   [--any [ANY ...]] output
+    Usage: app_name --required REQUIRED [-a] [-b] [--cactus CACTUS] 
+                    [--five FIVE FIVE FIVE ...] [--atleast ATLEAST [ATLEAST ...]]
+                    [--any [ANY ...]] output
 
 Compiling
 ---------
@@ -95,7 +95,7 @@ Method Summary
     addFinalArgument()    specify a final un-named argument
     ignoreFirstArgument() don't parse the first argument (usually the caller name on UNIX)
     parse()               invoke the parser on a `char**` array
-    retrieve()            retrieve a set of inputs for an option
+    retrieve()            retrieve a set of inputs for an argument
     usage()               return a formatted usage string
     empty()               check if the set of specified arguments is empty
     clear()               clear all specified arguments
