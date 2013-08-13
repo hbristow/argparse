@@ -42,7 +42,7 @@ Just grab the `argparse.hpp` header and go! The `ArgumentParser` is the only def
 
 Format
 ------
-**specifier**
+**specifier**  
 Arguments can be specified in a number of formats. They can have single character short names prefixed with a single '-':
 
     -b
@@ -51,7 +51,7 @@ or long name prefixed with '--':
 
     --banana
 
-**number**
+**number**  
 The number of expected inputs trailing an argument can also be specified. This comes in two flavours:
 
 
@@ -68,10 +68,10 @@ Variable number arguments allow for an undetermined number of inputs trailing an
 
 In both cases, the output is stored as a vector of strings. If the number of inputs is not specified, it defaults to 0.
 
-**required/optional**
+**required/optional**  
 Arguments can be marked as either required or optional. All required arguments must appear before any optional arguments in the command-line input.
 
-**final**
+**final**  
 Often UNIX command-line tools have an un-named final argument that collects all remaining inputs. The name that these inputs map to internally can be specified using the `addFinalArgument()` method of `ArgumentParser`. Along with its name, you can also specify the number of inputs to parse. Since it is un-named however, there are a number of restrictions:
 
 1. The final argument can always require a fixed number of inputs
