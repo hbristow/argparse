@@ -58,15 +58,15 @@ The number of expected inputs trailing an argument can also be specified. This c
 1. fixed number arguments
 2. variable number arguments
 
-Fixed number arguments are simply specified with an integer which is zero or greater. If that exact number of inputs trailing the argument is not found, the parser will fail with a `std::invalid_argument` exception. If the number is 1, the input is stored as a string. If the number is greater than 1, the input is stored as a vector of strings.
+Fixed number arguments are simply specified with an integer which is `0` or greater. If that exact number of inputs trailing the argument is not found, the parser will fail with a `std::invalid_argument` exception. If the number is `1`, the input is stored as a string. If the number is greater than `1`, the input is stored as a vector of strings.
 
 
 Variable number arguments allow for an undetermined number of inputs trailing an argument. The parser will attempt to consume as many arguments as possible until the next valid argument is encountered. There are two types of variable argument specifiers, and they use the same syntax as regular expressions:
 
-1. '+' matches one or more inputs
-2. '*' matches zero or more inputs
+1. `'+'` matches one or more inputs
+2. `'*'` matches zero or more inputs
 
-In both cases, the output is stored as a vector of strings. If the number of inputs is not specified, it defaults to 0.
+In both cases, the output is stored as a vector of strings. If the number of inputs is not specified, it defaults to `0`.
 
 **required/optional**  
 Arguments can be marked as either required or optional. All required arguments must appear before any optional arguments in the command-line input.
@@ -75,8 +75,8 @@ Arguments can be marked as either required or optional. All required arguments m
 Often UNIX command-line tools have an un-named final argument that collects all remaining inputs. The name that these inputs map to internally can be specified using the `addFinalArgument()` method of `ArgumentParser`. Along with its name, you can also specify the number of inputs to parse. Since it is un-named however, there are a number of restrictions:
 
 1. The final argument can always require a fixed number of inputs
-2. If a fixed number of inputs is specified, it must be 1 or greater
-3. The final argument can only take the '+' specifier if an argument with variadic number of inputs has not already been specified. This restiction exists because arguments do not have a fixed ordering and a variadic argument just before the final (un-named) argument will consume all of the reminaing arguments unless the final argument requires a fixed number of inputs
+2. If a fixed number of inputs is specified, it must be `1` or greater
+3. The final argument can only take the `'+'` specifier if an argument with variadic number of inputs has not already been specified. This restiction exists because arguments do not have a fixed ordering and a variadic argument just before the final (un-named) argument will consume all of the reminaing arguments unless the final argument requires a fixed number of inputs
 
 Retrieving
 ----------
@@ -94,6 +94,7 @@ Method Summary
 --------------
 
     ArgumentParser()      default constructor
+    useExceptions()       if true, parsing errors throw exceptions rather than printing to stderr and exiting
     appName()             set the name of the application
     addArgument()         specify an argument to search for
     addFinalArgument()    specify a final un-named argument
