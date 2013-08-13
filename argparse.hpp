@@ -118,6 +118,15 @@ private:
   // --------------------------------------------------------------------------
   // Argument
   // --------------------------------------------------------------------------
+  static String delimit(const String& name) {
+    return String(std::min(name.size(), (size_t)2), '-').append(name);
+  }
+  static String strip(const String& name) {
+    size_t begin = 0;
+    begin += name.size() > 0 ? name[0] == '-' : 0;
+    begin += name.size() > 3 ? name[1] == '-' : 0;
+    return name.substr(begin);
+  }
   static String upper(const String& in) {
     String out(in);
     std::transform(out.begin(), out.end(), out.begin(), ::toupper);
@@ -149,7 +158,7 @@ private:
     }
     String toString() const {
       std::ostringstream s;
-      String uname = name.empty() ? upper(short_name) : upper(name);
+      String uname = name.empty() ? upper(strip(short_name)) : upper(strip(name));
       if (optional) s << "[";
       s << canonicalName();
       if (fixed) {
@@ -223,12 +232,11 @@ public:
     insertArgument(arg);
   }
   void addFinalArgument(const String& name, char nargs=1, bool optional=false) {
-    final_name_ = name;
-    Argument arg("", name, optional, nargs);
+    final_name_ = delimit(name);
+    Argument arg("", final_name_, optional, nargs);
     insertArgument(arg);
   }
   void ignoreFirstArgument(bool ignore_first) { ignore_first_ = ignore_first; }
-
   String verify(const String& name) {
     if (name.empty())
       argumentError("argument names must be non-empty");
@@ -238,10 +246,7 @@ public:
       argumentError(String("invalid argument '").append(name).append("'. Multi-character names must begin with '--'"));
     return name;
   }
-  String delimit(const String& name) const {
-    return String(std::min(name.size(), (size_t)2), '-').append(name);
-  }
-    
+
   // --------------------------------------------------------------------------
   // Parse
   // --------------------------------------------------------------------------
