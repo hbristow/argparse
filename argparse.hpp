@@ -132,6 +132,11 @@ private:
     std::transform(out.begin(), out.end(), out.begin(), ::toupper);
     return out;
   }
+  static String escape(const String& in) {
+    String out(in);
+    if (in.find(' ') != std::string::npos) out = String("\"").append(out).append("\"");
+    return out;
+  }
 
   struct Argument {
     Argument() : short_name(""), name(""), optional(true), fixed_nargs(0), fixed(true) {}
@@ -156,11 +161,11 @@ private:
     String canonicalName() const {
       return (name.empty()) ? short_name : name;
     }
-    String toString() const {
+    String toString(bool named=true) const {
       std::ostringstream s;
       String uname = name.empty() ? upper(strip(short_name)) : upper(strip(name));
-      if (optional) s << "[";
-      s << canonicalName();
+      if (named && optional) s << "[";
+      if (named) s << canonicalName();
       if (fixed) {
         size_t N = std::min((size_t)3, fixed_nargs);
         for (size_t n = 0; n < N; ++n) s << " " << uname;
@@ -173,7 +178,7 @@ private:
         if (variable_nargs == '+') s << "[";
         s << uname << "...]";
       }
-      if (optional) s << "]";
+      if (named && optional) s << "]";
       return s.str();
     }
   };
@@ -266,7 +271,7 @@ public:
     size_t nfinal = final.optional ? 0 : (final.fixed ? final.fixed_nargs : (final.variable_nargs == '+' ? 1 : 0));
 
     // iterate over each element of the array
-    for (StringVector::const_iterator in = argv.begin()+ignore_first_; in != argv.end()-nfinal; ++in) {
+    for (StringVector::const_iterator in = argv.begin()+ignore_first_; in < argv.end()-nfinal; ++in) {
       String active_name = active.canonicalName();
       String el = *in;
       //  check if the element is a key
@@ -302,7 +307,7 @@ public:
       }
     }
 
-    for (StringVector::const_iterator in = argv.end()-nfinal; in != argv.end(); ++in) {
+    for (StringVector::const_iterator in = std::max(argv.begin(), argv.end()-nfinal); in != argv.end(); ++in) {
       String el = *in;
       // check if we accidentally find an argument specifier
       if (index_.count(el))
@@ -337,7 +342,7 @@ public:
   String usage() {
     // premable app name
     std::ostringstream help;
-    help << "Usage: " << app_name_ << " ";
+    help << "Usage: " << escape(app_name_);
     size_t indent = help.str().size();
     size_t linelength = 0;
 
@@ -346,6 +351,7 @@ public:
       Argument arg = *it;
       if (arg.optional) continue;
       if (arg.name.compare(final_name_) == 0) continue;
+      help << " ";
       String argstr = arg.toString();
       if (argstr.size() + linelength > 80) {
         help << "\n" << String(indent, ' ');
@@ -353,7 +359,7 @@ public:
       } else {
         linelength += argstr.size();
       }
-      help << argstr << " ";
+      help << argstr;
     }
 
     // get the optional arguments
@@ -361,6 +367,7 @@ public:
       Argument arg = *it;
       if (!arg.optional) continue;
       if (arg.name.compare(final_name_) == 0) continue;
+      help << " ";
       String argstr = arg.toString();
       if (argstr.size() + linelength > 80) {
         help << "\n" << String(indent, ' ');
@@ -368,13 +375,13 @@ public:
       } else {
         linelength += argstr.size();
       }
-      help << argstr << " ";
+      help << argstr;
     }
 
     // get the final argument
     if (!final_name_.empty()) {
       Argument arg = arguments_[index_[final_name_]];
-      String argstr = arg.toString();
+      String argstr = arg.toString(false);
       if (argstr.size() + linelength > 80) {
         help << "\n" << String(indent, ' ');
         linelength = 0;
