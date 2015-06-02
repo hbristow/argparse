@@ -317,7 +317,8 @@ public:
             }
         }
 
-        for (StringVector::const_iterator in = std::max(argv.begin(), argv.end() - nfinal);
+        for (StringVector::const_iterator in =
+                 std::max(argv.begin() + ignore_first_, argv.end() - nfinal);
              in != argv.end(); ++in) {
             String el = *in;
             // check if we accidentally find an argument specifier
